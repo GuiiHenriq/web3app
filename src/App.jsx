@@ -99,18 +99,15 @@ export default function App() {
           I'm Gui and this is my first App on WEB3.
         </div>
 
-        <button className="waveButton" onClick={wave}>
-          Send Emoji
-        </button>
-
-        {/*
-        * Se não existir currentAccount, apresente este botão
-        */}
         {!currentAccount && (
           <button className="waveButton" onClick={connectWallet}>
-            Connect Wallet
+            Connect Wallet 🪙
           </button>
         )}
+
+        <button className="waveButton" onClick={wave}>
+          Send Emoji 🤞
+        </button>
       </div>
     </div>
   );
