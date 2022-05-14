@@ -8,7 +8,7 @@ export default function App() {
   const [string, setString] = useState('');
   const [allWaves, setAllWaves] = useState([]);
 
-  const contractAddress = '0xD45271e1C7E7490bF64EA76B0Ab5297c774C62f1';
+  const contractAddress = '0xF406f54D027500977bB27D85D4338197b52d9AA7';
   const contractABI = abi.abi;
 
   const getAllWaves = async () => {
@@ -24,8 +24,6 @@ export default function App() {
         );
 
         const waves = await wavePortalContract.getAllWaves();
-
-        console.log(waves);
 
         let wavesCleaned = [];
         waves.forEach((wave) => {
