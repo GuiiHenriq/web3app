@@ -8,12 +8,13 @@ export default function App() {
   const [string, setString] = useState('');
   const [allWaves, setAllWaves] = useState([]);
 
-  const contractAddress = '0xF406f54D027500977bB27D85D4338197b52d9AA7';
+  const contractAddress = '0xf995a021775EB6f69fB4f7DAE7f0e7DD04555f91';
   const contractABI = abi.abi;
 
   const getAllWaves = async () => {
+    const { ethereum } = window;
+
     try {
-      const { ethereum } = window;
       if (ethereum) {
         const provider = new ethers.providers.Web3Provider(ethereum);
         const signer = provider.getSigner();
@@ -22,20 +23,19 @@ export default function App() {
           contractABI,
           signer,
         );
-
         const waves = await wavePortalContract.getAllWaves();
 
-        let wavesCleaned = [];
-        waves.forEach((wave) => {
-          wavesCleaned.push({
+        const wavesCleaned = waves.map((wave) => {
+          return {
             address: wave.waver,
             timestamp: new Date(wave.timestamp * 1000),
             message: wave.message,
-          });
+          };
         });
+
         setAllWaves(wavesCleaned);
       } else {
-        console.log('Objeto Ethereum não existe!');
+        console.log('Non-existent Ethereum object!');
       }
     } catch (error) {
       console.log(error);
@@ -81,21 +81,21 @@ export default function App() {
       const { ethereum } = window;
 
       if (!ethereum) {
-        console.log('Garanta que possua a Metamask instalada!');
+        console.log('You do not have MetaMask installed');
         return;
       } else {
-        console.log('Temos o objeto ethereum', ethereum);
+        console.log('Ethereum object found', ethereum);
       }
 
       const accounts = await ethereum.request({ method: 'eth_accounts' });
 
       if (accounts.length !== 0) {
         const account = accounts[0];
-        console.log('Encontrada a conta autorizada:', account);
+        console.log('Authorized account found:', account);
         setCurrentAccount(account);
         getAllWaves();
       } else {
-        console.log('Nenhuma conta autorizada foi encontrada');
+        console.log('Authorized account not found!');
       }
     } catch (error) {
       console.log(error);
@@ -107,7 +107,8 @@ export default function App() {
       const { ethereum } = window;
 
       if (!ethereum) {
-        alert('MetaMask encontrada!');
+        alert('Use a crypto wallet\nhttps://metamask.io/');
+        window.open('https://metamask.io/', '_blank');
         return;
       }
 
@@ -115,7 +116,7 @@ export default function App() {
         method: 'eth_requestAccounts',
       });
 
-      console.log('Conectado', accounts[0]);
+      console.log('Connected', accounts[0]);
       setCurrentAccount(accounts[0]);
     } catch (error) {
       console.log(error);
@@ -136,19 +137,23 @@ export default function App() {
         );
 
         let count = await wavePortalContract.getTotalWaves();
-        console.log('Recuperado o número de tchauzinhos...', count.toNumber());
+        console.log(
+          'Retrieved the number of messages sent...',
+          count.toNumber(),
+        );
 
-        console.log(string);
-        const waveTxn = await wavePortalContract.wave(string);
-        console.log('Minerando...', waveTxn.hash);
+        const waveTxn = await wavePortalContract.wave(string, {
+          gasLimit: 300000,
+        });
+        console.log('Loading...', waveTxn.hash);
 
         await waveTxn.wait();
-        console.log('Minerado -- ', waveTxn.hash);
+        console.log('Success -- ', waveTxn.hash);
 
         count = await wavePortalContract.getTotalWaves();
-        console.log('Total de tchauzinhos recuperado...', count.toNumber());
+        console.log('Total messages received...', count.toNumber());
       } else {
-        console.log('Objeto Ethereum não encontrado!');
+        console.log('Ethereum object not found!');
       }
     } catch (error) {
       console.log(error);
@@ -172,16 +177,20 @@ export default function App() {
           </button>
         )}
 
-        <input
-          type="text"
-          className="waveInput"
-          placeholder="Send anything..."
-          onChange={(event) => setString(event.target.value)}
-        />
+        {currentAccount && (
+          <div>
+            <input
+              type="text"
+              className="waveInput"
+              placeholder="Send anything..."
+              onChange={(event) => setString(event.target.value)}
+            />
 
-        <button className="waveButton" onClick={wave}>
-        Talk to Me ✍️
-        </button>
+            <button className="waveButton" onClick={wave}>
+              Talk to Me ✍️
+            </button>
+          </div>
+        )}
 
         <div className="card">
           {allWaves.map((wave, index) => {
