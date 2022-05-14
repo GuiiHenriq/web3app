@@ -178,9 +178,12 @@ export default function App() {
         )}
 
         {currentAccount && (
-          <div>
-            <input
-              type="text"
+          <div className="input">
+            <textarea
+              name="input"
+              rows="4"
+              cols="50"
+              maxLength="60"
               className="waveInput"
               placeholder="Send anything..."
               onChange={(event) => setString(event.target.value)}
@@ -206,6 +209,18 @@ export default function App() {
             );
           })}
         </div>
+
+        <footer className="footer">
+          <p>
+            <a
+              href="https://github.com/GuiiHenriq/web3app#readme"
+              target="_blank"
+            >
+              HOW TO USE
+            </a>{' '}
+            ⚠️
+          </p>
+        </footer>
       </div>
     </div>
   );
