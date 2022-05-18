@@ -167,9 +167,9 @@ export default function App() {
   return (
     <div className="mainContainer">
       <div className="dataContainer">
-        <div className="header">🏄 Hey Guys!</div>
+        <div className="header">🔥 Send Message 🔥</div>
 
-        <div className="bio">I'm Gui and this is my first App on WEB3.</div>
+        <div className="bio">Send us a message with Etherum and you could be the lucky one to win Etherum.</div>
 
         {!currentAccount && (
           <button className="waveButton" onClick={connectWallet}>
@@ -190,7 +190,7 @@ export default function App() {
             />
 
             <button className="waveButton" onClick={wave}>
-              Talk to Me ✍️
+            Send Message ✍️
             </button>
           </div>
         )}
