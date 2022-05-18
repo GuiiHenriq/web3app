@@ -169,7 +169,7 @@ export default function App() {
       <div className="dataContainer">
         <div className="header">🔥 Send Message 🔥</div>
 
-        <div className="bio">Send us a message with Etherum and you could be the lucky one to win Etherum.</div>
+        <div className="bio">Send us a message with Ethereum and you could be the lucky one to win Ethereum.</div>
 
         {!currentAccount && (
           <button className="waveButton" onClick={connectWallet}>
